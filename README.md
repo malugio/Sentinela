@@ -1,4 +1,4 @@
-# Life on Mars
+# Her Desher
 
 ##Premissa
 Após um colapso nuclear global, a Terra se tornou inabitável devido à radiação e à acidificação da água. A única parte da humanidade que sobreviveu vive em estações espaciais em órbita da Terra. Os recursos estão acabando, uma exploração em Marte é a última esperança para a sobrevivência, nesta bsuca por recursos muitos desafios serão encontrados até o objetivo final, a exploração e habitação em Marte.
