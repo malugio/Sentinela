@@ -127,7 +127,7 @@ Lista de som: Ao longo das fases serão necessários sons diferenetes:
 - Definir o inventário mais menus de compra;
 - Correção de problemas e retoques;
 
-# Fase 4 – Testes finais e Feira
+ **Fase 4 – Testes finais e Feira**
 - Testes;
 - Ajustes finais;
 - Preparação para a feira;
