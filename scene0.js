@@ -12,6 +12,18 @@ class scene0 extends Phaser.Scene {
   }
 
   preload() {
+    this.load.setPath("assets/")
+
+    this.load.tilemapTiledJSON("marte1," "marte1.json"); 
+    
+    this.load.image("tileset", "Mars Tile_Set.png");
+    
+    this.load.spritesheet ("character", this.alien.png, {
+     frameWidth: 32,
+     frameHeight: 32,
+    });
+
+    
     this.load.spritesheet("alien", "assets/alien.png", {
       frameWidth: 64,
       frameHeight: 64,
@@ -34,6 +46,12 @@ class scene0 extends Phaser.Scene {
   }
 
   create() {
+
+    this.tilemap = this.make.tilemap({key:"map"});
+
+    this.tilesetTileset = this.tilemap.addTilesetImage("tileset");
+
+    this.layer.ceu = this.tilemap.createLayer("ceu", [thistilesetTileset]);
   
   this.laser = this.sound.add
   ("laser");
