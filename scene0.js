@@ -24,11 +24,6 @@ class scene0 extends Phaser.Scene {
 
     this.load.image("tileset", "mars-tileset.png");
 
-    this.load.spritesheet("buttons", "assets/buttons.png", {
-      frameWidth: 32,
-      frameHeight: 32,
-    });
-
     this.load.plugin(
       "rexvirtualjoystickplugin",
       "../rexvirtualjoystickplugin.min.js",
@@ -229,40 +224,6 @@ class scene0 extends Phaser.Scene {
         this.alien.anims.stop();
       }
     });
-
-    this.button = this.add
-      .sprite(700, 350, "buttons", 10)
-      .setScale(2)
-      .setInteractive()
-      .on("pointerdown", () => {
-        this.button.setFrame(11);
-      })
-      .on("pointerup", () => {
-        this.button.setFrame(10);
-        this.money += 10;
-        this.textMoney.setText(`Money: ${this.money}`);
-        this.laser.play();
-      });
-
-    this.textMoney = this.add.text(16, 16, `Money: ${this.money}`, {
-      fontSize: "32px",
-      fill: "#fff",
-    });
-
-    this.textTime = this.add.text(16, 50, `Time: ${this.timer}`, {
-      fontSize: "32px",
-      fill: "#fff",
-    });
-
-    setInterval(() => {
-      this.timer -= 1;
-      this.textTime.setText(`Time: ${this.timer}`);
-
-      if (this.timer <= 0) {
-        this.scene.stop();
-        this.scene.start("game-over");
-      }
-    }, 1000);
   }
 }
 export default scene0;
