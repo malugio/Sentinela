@@ -8,15 +8,15 @@ class scene0 extends Phaser.Scene {
     this.money = 0;
     this.timer = 120;
   }
-
+  
   preload() {
     this.load.setPath("assets/");
-
+    
     this.load.tilemapTiledJSON("mars", "mars.json");
-
+    
     this.load.image("tileset", "mars-tileset.png");
 
-
+    
     this.load.spritesheet("astronauta", "astronauta.png", {
       frameWidth: 64,
       frameHeight: 64,
@@ -26,7 +26,7 @@ class scene0 extends Phaser.Scene {
       frameWidth: 64,
       frameHeight: 64,
     });
-
+    
     this.load.spritesheet("buttons", "buttons.png", {
       frameWidth: 32,
       frameHeight: 32,
@@ -37,11 +37,11 @@ class scene0 extends Phaser.Scene {
       "../rexvirtualjoystickplugin.min.js",
       true,
     );
-
+    
     this.load.audio("music", "music.mp3");
     this.load.audio("laser", "laser.mp3");
   }
-
+  
   create() {
     this.tilemap = this.make.tilemap({ key: "mars" });
 
@@ -63,11 +63,18 @@ class scene0 extends Phaser.Scene {
     this.layerrochas = this.tilemap.createLayer("rochas", [this.tilesetTileset
     ]);
     
-  
-
+    
+    this.joystick = this.plugins.get("rexvirtualjoystickplugin").add (this, {
+        x: 100,
+        y: 350,
+        radius: 50,
+        base: this.add.circle(0, 0, 50, 0xcccccc),
+        thumb: this.add.circle(0, 0, 25, 0x666666),
+      });
+    
     this.laser = this.sound.add("laser");
     this.music = this.sound.add("music", { loop: true }).play();
-
+    
     this.anims.create({
       key: "stay",
       frames: this.anims.generateFrameNumbers("astronauta", { start: 0, end: 1 }),
@@ -81,7 +88,7 @@ class scene0 extends Phaser.Scene {
       frameRate: 10,
       repeat: -1,
     });
-
+    
     this.anims.create({
       key: "walk-left",
       frames: this.anims.generateFrameNumbers("astronauta", { start: 10, end: 17  }),
@@ -132,13 +139,6 @@ class scene0 extends Phaser.Scene {
   }
 }  
 
-  this .joystick = this.plugins.get("rexvirtualjoystickplugin").add(this, {
-      x: 100,
-      y: 350,
-      radius: 50,
-      base: this.add.circle(0, 0, 50, 0xcccccc),
-      thumb: this.add.circle(0, 0, 25, 0x666666),
-    });
 
     this.joystick.on("update", () => {
       const angle = Phaser.Math.DegToRad(this.joystick.angle);
