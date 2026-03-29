@@ -1,7 +1,7 @@
 class scene0 extends Phaser.Scene {
   constructor() {
     super("scene0");
-
+    
     this.threshold = 0.1;
     this.speed = 100;
     this.direction = undefined;
@@ -15,7 +15,7 @@ class scene0 extends Phaser.Scene {
     this.load.tilemapTiledJSON("mars", "mars.json");
     
     this.load.image("tileset", "mars-tileset.png");
-
+    
     
     this.load.spritesheet("astronauta", "astronauta.png", {
       frameWidth: 64,
@@ -44,12 +44,12 @@ class scene0 extends Phaser.Scene {
   
   create() {
     this.tilemap = this.make.tilemap({ key: "mars" });
-
+    
     this.tilesetTileset = this.tilemap.addTilesetImage(
       "mars-tileset",
       "tileset",
     );
-
+    
     this.layerCeu = this.tilemap.createLayer("ceu", [this.tilesetTileset
     ]);
     this.layerareia = this.tilemap.createLayer("areia", [this.tilesetTileset
@@ -64,14 +64,48 @@ class scene0 extends Phaser.Scene {
     ]);
     
     
-    this.joystick = this.plugins.get("rexvirtualjoystickplugin").add (this, {
-        x: 100,
-        y: 350,
-        radius: 50,
-        base: this.add.circle(0, 0, 50, 0xcccccc),
-        thumb: this.add.circle(0, 0, 25, 0x666666),
-      });
+    this.joystick = this.plugins.get("rexvirtualjoystickplugin").add(this, {
+      x: 100,
+      y: 350,
+      radius: 50,
+      base: this.add.circle(0, 0, 50, 0xcccccc),
+            thumb: this.add.circle(0, 0, 25, 0x666666),
+
+    });
+     
+      this.joystick.on("update", () => {
+        const angle = Phaser.Math.DegToRad(this.joystick.angle);
+        const force = this.joystick.force;
+      
+        if (force > this.threshold) {
+          this.direction = new Phaser.Math.Vector2(
+            Math.cos(angle),
+            Math.sin(angle),
+          ).normalize();
+        }
+      
+        if (this.joystick.force > 0) {
+          this.astronauta.setVelocity(
+            this.direction.x * this.speed,
+            this.direction.y * this.speed,
+          );
+      
+          switch (true) {
+            case this.joystick.angle >= -45 && this.joystick.angle < 45:
+              this.astronauta.anims.play("walk-right", true);
+              break;
+            case this.joystick.angle >= 135 || this.joystick.angle < -135:
+              this.astronauta.anims.play("walk-left", true);
+              break;
+          }
+        } else {
+          this.astronauta.setVelocity(0, 0);
+          this.astronauta.anims.stop();
+        }
+      }),
     
+
+
     this.laser = this.sound.add("laser");
     this.music = this.sound.add("music", { loop: true }).play();
     
@@ -121,9 +155,6 @@ class scene0 extends Phaser.Scene {
 
     this.astronauta.setCollideWorldBounds(true);
 
-    this.layerCeu.setCollisionByProperty({ collides: true });
-    this.physics.add.collider(this.astronauta, this.layerCeu);
-
     this.layerChao.setCollisionByProperty({ collides: true });
     this.physics.add.collider(this.astronauta, this.layerChao);
 
@@ -137,39 +168,6 @@ class scene0 extends Phaser.Scene {
   
     tile.setCollision(false, false, true, false);
   }
-}  
-
-
-    this.joystick.on("update", () => {
-      const angle = Phaser.Math.DegToRad(this.joystick.angle);
-      const force = this.joystick.force;
-
-      if (force > this.threshold) {
-        this.direction = new Phaser.Math.Vector2(
-          Math.cos(angle),
-          Math.sin(angle),
-        ).normalize();
-      }
-
-      if (this.joystick.force > 0) {
-        this.astronauta.setVelocity(
-          this.direction.x * this.speed,
-          this.direction.y * this.speed,
-        );
-
-        switch (true) {
-          case this.joystick.angle >= -45 && this.joystick.angle < 45:
-            this.astronauta.anims.play("walk-right", true);
-            break;
-          case this.joystick.angle >= 135 || this.joystick.angle < -135:
-            this.astronauta.anims.play("walk-left", true);
-            break;
-        }
-      } else {
-        this.astronauta.setVelocity(0, 0);
-        this.astronauta.anims.stop();
-      }
-    });
-  
+}
 
 export default scene0;

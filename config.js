@@ -6,14 +6,14 @@ var config = {
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { x: 0, y: 0 },
-      debug: true
+      gravity: { x: 0, y: 100 },
+      debug: true,
     },
-  },  
+  },
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
 };
- 
+
 export default config;
