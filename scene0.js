@@ -18,18 +18,17 @@ class scene0 extends Phaser.Scene {
     });
     this.load.spritesheet("monster", "monster.png", {
       frameWidth: 64,
-      frameHeight: 64, 
+      frameHeight: 64,
     });
-  
-    this.load.image("tileset", "marte.png");
-  
+
+    this.load.image("marte", "mars-tileset.png");
+
     this.load.spritesheet("buttons", "buttons.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
 
     this.load.audio("music", "music.mp3");
-    this.load.audio("laser", "laser.mp3");
 
     this.load.plugin(
       "rexvirtualjoystickplugin",
@@ -39,50 +38,37 @@ class scene0 extends Phaser.Scene {
   }
 
   create() {
-    this.tilesetmarte = this.make.tilemap({ key: "mars", url: "mars.json" });
+    this.tilesetmars = this.make.tilemap({ key: "mars" });
 
-    this.tileset.marte = this.tilesetmarte.addTilesetImage("marte");
+    this.tilesetmars = this.tilesetmars.addTilesetImage("mars");
 
-    this.layerceu = this.tilesetmarte
-      .createLayer("ceu", [this.tileset.marte])
-    this.layersol = this.tilesetmarte
-      .createLayer("sol", [this.tileset.marte])
-    this.layerf4 = this.tilesetmarte
-      .createLayer("f4", [this.tileset.marte])
-    this.layerf2 = this.tilesetmarte
-      .createLayer("f2", [this.tileset.marte])
-    this.layerf1 = this.tilesetmarte
-      .createLayer("f1", [this.tileset.marte])
-    this.layerf5 = this.tilesetmarte
-      .createLayer("f5", [this.tileset.marte])
-     this.layertub1 = this.tilesetmarte
-      .createLayer("tub1", [this.tileset.marte])
-    this.layertub2 = this.tilesetmarte
-      .createLayer("tub2", [this.tileset.marte])
-    this.layerchaos = this.tilesetmarte
-      .createLayer("chaos", [this.tileset.marte])
-    this.layerplatf = this.tilesetmarte
-      .createLayer("platf", [this.tileset.marte])
-    this.layersub1= this.tilesetmarte 
-      .createLayer("sub1", [this.tileset.marte])
-    this.layersub2=this.tilesetmarte
-      .createLayer("sub2", [this.tileset.marte])
-   
+    this.layerceu = this.tilesetmars.createLayer("ceu", [this.tilesetmars]);
+    this.layersol = this.tilesetmars.createLayer("sol", [this.tilesetmars]);
+    this.layerf4 = this.tilesetmars.createLayer("f4", [this.tilesetmars]);
+    this.layerf2 = this.tilesetmars.createLayer("f2", [this.tilesetmars]);
+    this.layerf1 = this.tilesetmars.createLayer("f1", [this.tilesetmars]);
+    this.layerf5 = this.tilesetmars.createLayer("f5", [this.tilesetmars]);
+    this.layertub1 = this.tilesetmars.createLayer("tub1", [this.tilesetmars]);
+    this.layertub2 = this.tilesetmars.createLayer("tub2", [this.tilesetmars]);
+    this.layerchaos = this.tilesetmars.createLayer("chaos", [this.tilesetmars]);
+    this.layerplatf = this.tilesetmars.createLayer("platf", [this.tilesetmars]);
+    this.layersub1 = this.tilesetmars.createLayer("sub1", [this.tilesetmars]);
+    this.layersub2 = this.tilesetmars.createLayer("sub2", [this.tilesetmars]);
+
     /*
-    this.layerCharacter = this.tilesetmarte.createLayer("character", [
+    this.layerCharacter = this.tilesetmars.createLayer("character", [
       this.tilesetCharacter,
     ]);
-    this.layerEnemy = this.tilesetmarte.createLayer("enemy", [this.tilesetAndroid]);
+    this.layerEnemy = this.tilesetmars.createLayer("enemy", [this.tilesetAndroid]);
     */
 
-    this.astronauta = this.physics.add
-      .sprite(150, 656, "astronauta", 0)
+    this.astronauta = this.physics.add.sprite(150, 656, "astronauta", 0);
 
     this.anims.create({
       key: "standing-still",
       frames: this.anims.generateFrameNumbers("astronauta", {
         start: 0,
-        end: 2
+        end: 2,
       }),
       frameRate: 5,
       repeat: -1,
@@ -109,22 +95,17 @@ class scene0 extends Phaser.Scene {
     this.physics.world.setBounds(
       0,
       0,
-      this.tilemarte.widthInPixels,
-      this.tilemarte.heightInPixels,
+      this.tilesetmars.widthInPixels,
+      this.tilesetmars.heightInPixels,
     );
     this.cameras.main.setBounds(
       0,
       0,
-      this.tilemarte.widthInPixels,
-      this.tilemarte.heightInPixels,
+      this.tilesetmars.widthInPixels,
+      this.tilesetmars.heightInPixels,
     );
     this.cameras.main.startFollow(this.astronauta);
 
-    this.lights.enable();
-    this.lights.setAmbientColor(0x333333);
-    this.lamp = this.lights
-      .addLight(this.astronauta.x, this.astronauta.y, 64)
-      .setIntensity(2);
 
     this.astronauta.setCollideWorldBounds(true);
 
@@ -150,7 +131,8 @@ class scene0 extends Phaser.Scene {
     });
 
     this.music = this.sound.add("music", { loop: true }).play();
-    this.laser = this.sound.add("laser");
+
+    this.coin = this.sound.add("coin");
 
     this.joystick = this.plugins.get("rexvirtualjoystickplugin").add(this, {
       x: 100,
@@ -174,10 +156,13 @@ class scene0 extends Phaser.Scene {
         switch (true) {
           // right
           case this.joystick.angle >= -20 && this.joystick.angle < 20:
-            this.player.flipX = false;
+            this.astronauta.flipX = false;
             this.astronauta.setVelocityX(200);
 
-            if (this.astronauta.body.blocked.down || this.astronauta.body.blocked.up) {
+            if (
+              this.astronauta.body.blocked.down ||
+              this.astronauta.body.blocked.up
+            ) {
               this.astronauta.anims.play("running", true);
             }
             break;
@@ -186,7 +171,10 @@ class scene0 extends Phaser.Scene {
             this.astronauta.flipX = true;
             this.astronauta.setVelocityX(-200);
 
-            if (this.astronauta.body.blocked.down || this.astronauta.body.blocked.up) {
+            if (
+              this.astronauta.body.blocked.down ||
+              this.astronauta.body.blocked.up
+            ) {
               this.astronauta.anims.play("running", true);
             }
             break;
@@ -194,18 +182,6 @@ class scene0 extends Phaser.Scene {
       else this.astronauta.setVelocityX(0);
     });
 
-    this.changeGravityButton = this.add
-      .sprite(700, 400, "buttons", 0)
-      .setInteractive()
-      .on("pointerdown", () => {
-        this.changeGravityButton.setFrame(1);
-        this.physics.world.gravity.y *= -1;
-        this.astronauta.setFlipY(this.physics.world.gravity.y < 0);
-      })
-      .on("pointerup", () => {
-        this.changeGravityButton.setFrame(0);
-      })
-      .setScrollFactor(0);
 
     this.jumpButton = this.add
       .sprite(750, 400, "buttons", 8)
@@ -227,9 +203,6 @@ class scene0 extends Phaser.Scene {
       (this.astronauta.body.blocked.down || this.astronauta.body.blocked.up)
     )
       this.astronauta.anims.play("standing-still", true);
-
-    this.lamp.x = this.astronauta.x;
-    this.lamp.y = this.astronauta.y;
   }
 
   jump(astronauta, gravity) {
