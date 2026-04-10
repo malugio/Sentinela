@@ -29,14 +29,13 @@ class scene0 extends Phaser.Scene {
     });
 
     this.load.audio("music", "music.mp3");
+    
 
     this.load.plugin(
       "rexvirtualjoystickplugin",
       "../rexvirtualjoystickplugin.min.js",
       true,
     );
-
-    this.load.audio("coin", "coin.mp3");
   }
 
   create() {
@@ -146,7 +145,6 @@ class scene0 extends Phaser.Scene {
 
     this.music = this.sound.add("music", { loop: true }).play();
 
-    this.coin = this.sound.add("coin");
 
     this.joystick = this.plugins.get("rexvirtualjoystickplugin").add(this, {
       x: 100,
