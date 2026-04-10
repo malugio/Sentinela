@@ -69,11 +69,25 @@ class scene0 extends Phaser.Scene {
       key: "standing-still",
       frames: this.anims.generateFrameNumbers("astronauta", {
         start: 0,
-        end: 2,
+        end: 0,
       }),
       frameRate: 5,
       repeat: -1,
     });
+
+
+
+    this.anims.create({
+      key: "standing-still",
+      frames: this.anims.generateFrameNumbers("astronauta", {
+        start: 0,
+        end: 0,
+      }),
+      frameRate: 5,
+      repeat: -1,
+    });
+
+
     this.anims.create({
       key: "running-right",
       frames: this.anims.generateFrameNumbers("astronauta", {
@@ -84,6 +98,16 @@ class scene0 extends Phaser.Scene {
       repeat: -1,
     });
   
+    this.anims.create({
+      key: "standing-still",
+      frames: this.anims.generateFrameNumbers("astronauta", {
+        start: 1,
+        end: 1,
+      }),
+      frameRate: 5,
+      repeat: -1,
+    });
+
     this.anims.create({
       key: "running-left",
       frames: this.anims.generateFrameNumbers("astronauta", {
