@@ -125,12 +125,13 @@ class scene0 extends Phaser.Scene {
     this.layerceu.setCollisionByProperty({ collides: true });
     this.physics.add.collider(this.astronauta, this.layerceu);
 
-    this.layersol.setCollisionByProperty({ collides: true });
-    this.physics.add.collider(this.astronauta, this.layersol);
+    this.layertub1.setCollisionByProperty({ collides: true });
+    this.physics.add.collider(this.astronauta, this.layertub1);
 
-    this.layerf4.setCollisionByProperty({ collides: true });
-    this.physics.add.collider(this.astronauta, this.layerf4);
+     this.layertub2.setCollisionByProperty({ collides: true });
+    this.physics.add.collider(this.astronauta, this.layertub);
 
+    
     this.layerchao.setCollisionByProperty({ collides: true });
     this.physics.add.collider(this.astronauta, this.layerchao);
 
