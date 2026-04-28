@@ -56,13 +56,7 @@ class scene0 extends Phaser.Scene {
     this.layersub1 = this.map.createLayer("sub1", [this.tilesetmars]);
     this.layersub2 = this.map.createLayer("sub2", [this.tilesetmars]);
 
-    /*
-    this.layerCharacter = this.tilesetmars.createLayer("character", [
-      this.tilesetCharacter,
-    ]);
-    this.layerEnemy = this.tilesetmars.createLayer("enemy", [this.tilesetAndroid]);
-    */
-
+  
     this.astronauta = this.physics.add.sprite(150, 0, "astronauta", 0);
 
     this.anims.create({
@@ -141,8 +135,7 @@ class scene0 extends Phaser.Scene {
       this.tilesetmars.heightInPixels,
     );
     this.cameras.main.startFollow(this.astronauta);
-
-
+  
     this.astronauta.setCollideWorldBounds(true);
 
     this.layerceu.setCollisionByProperty({ collides: true });
@@ -152,15 +145,14 @@ class scene0 extends Phaser.Scene {
     this.physics.add.collider(this.astronauta, this.layertub1);
 
      this.layertub2.setCollisionByProperty({ collides: true });
-    this.physics.add.collider(this.astronauta, this.layertub);
+    this.physics.add.collider(this.astronauta, this.layertub2);
 
-    
     this.layerchao.setCollisionByProperty({ collides: true });
     this.physics.add.collider(this.astronauta, this.layerchao);
 
     this.layerplatf.setCollisionByProperty({ collides: true });
     this.physics.add.collider(this.astronauta, this.layerplatf);
-    this.layerplatf.forEachTile((tile) => {
+  this.layerplatf.forEachTile((tile) => {
       if (tile.properties.collides) {
         // left, right, up, down
         tile.setCollision(false, false, true, false);
@@ -171,11 +163,11 @@ class scene0 extends Phaser.Scene {
 
 
     this.joystick = this.plugins.get("rexvirtualjoystickplugin").add(this, {
-      x: 100,
-      y: 350,
+      x: 80,
+      y: 360,
       radius: 50,
-      base: this.add.circle(0, 0, 50, 0xcccccc),
-      thumb: this.add.circle(0, 0, 25, 0x666666),
+      base: this.add.circle(0, 0, 40, 0xcccccc),
+      thumb: this.add.circle(0, 0, 20, 0x666666),
     });
 
     this.joystick.on("update", () => {
