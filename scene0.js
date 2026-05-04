@@ -58,6 +58,7 @@ class scene0 extends Phaser.Scene {
 
   
     this.astronauta = this.physics.add.sprite(150, 0, "astronauta", 0);
+    this.astronauta.setSize(32, 48);
 
     this.anims.create({
       key: "standing-still",

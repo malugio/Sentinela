@@ -9,12 +9,17 @@ class start extends Phaser.Scene {
   }
 
   create() {
-    this.add
-      .image(400, 225, "start")
-      .setInteractive()
-      .on("pointerdown", () => {
-        this.scene.start("scene0");
-      });
+    const bg = this.add.image(400, 225, "start");
+    const scaleX = this.sys.game.config.width / bg.width;
+    const scaleY = this.sys.game.config.height / bg.height;
+    const scale = Math.max(scaleX, scaleY);
+
+    bg.setScale(scale);
+    bg.setPosition(this.cameras.main.centerX, this.cameras.main.centerY);
+
+    bg.setInteractive().on("pointerdown", () => {
+      this.scene.start("scene0");
+    });
   }
 }
 
