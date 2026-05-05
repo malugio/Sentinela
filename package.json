@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "install": "npm install --prefix server",
+    "start": "npm start --prefix server"
+  }
+}
