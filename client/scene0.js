@@ -5,6 +5,7 @@ class scene0 extends Phaser.Scene {
     this.threshold = 0.1;
     this.speed = 100;
     this.direction = undefined;
+    this.remotePlayers = [];
   }
 
   preload() {
@@ -56,7 +57,17 @@ class scene0 extends Phaser.Scene {
     this.layersub1 = this.map.createLayer("sub1", [this.tilesetmars]);
     this.layersub2 = this.map.createLayer("sub2", [this.tilesetmars]);
 
-  
+    // Criar animações para o monster também
+    this.anims.create({
+      key: "monster-standing-still",
+      frames: this.anims.generateFrameNumbers("monster", {
+        start: 0,
+        end: 0,
+      }),
+      frameRate: 5,
+      repeat: -1,
+    });
+
     this.astronauta = this.physics.add.sprite(150, 0, "astronauta", 0);
     this.astronauta.setSize(32, 48);
 
@@ -70,8 +81,6 @@ class scene0 extends Phaser.Scene {
       repeat: -1,
     });
 
-
-
     this.anims.create({
       key: "standing-still",
       frames: this.anims.generateFrameNumbers("astronauta", {
@@ -82,7 +91,6 @@ class scene0 extends Phaser.Scene {
       repeat: -1,
     });
 
-
     this.anims.create({
       key: "running-right",
       frames: this.anims.generateFrameNumbers("astronauta", {
@@ -92,7 +100,7 @@ class scene0 extends Phaser.Scene {
       frameRate: 10,
       repeat: -1,
     });
-  
+
     this.anims.create({
       key: "standing-still",
       frames: this.anims.generateFrameNumbers("astronauta", {
@@ -136,7 +144,7 @@ class scene0 extends Phaser.Scene {
       this.tilesetmars.heightInPixels,
     );
     this.cameras.main.startFollow(this.astronauta);
-  
+
     this.astronauta.setCollideWorldBounds(true);
 
     this.layerceu.setCollisionByProperty({ collides: true });
@@ -145,7 +153,7 @@ class scene0 extends Phaser.Scene {
     this.layertub1.setCollisionByProperty({ collides: true });
     this.physics.add.collider(this.astronauta, this.layertub1);
 
-     this.layertub2.setCollisionByProperty({ collides: true });
+    this.layertub2.setCollisionByProperty({ collides: true });
     this.physics.add.collider(this.astronauta, this.layertub2);
 
     this.layerchao.setCollisionByProperty({ collides: true });
@@ -153,7 +161,7 @@ class scene0 extends Phaser.Scene {
 
     this.layerplatf.setCollisionByProperty({ collides: true });
     this.physics.add.collider(this.astronauta, this.layerplatf);
-  this.layerplatf.forEachTile((tile) => {
+    this.layerplatf.forEachTile((tile) => {
       if (tile.properties.collides) {
         // left, right, up, down
         tile.setCollision(false, false, true, false);
@@ -161,7 +169,6 @@ class scene0 extends Phaser.Scene {
     });
 
     this.music = this.sound.add("music", { loop: true }).play();
-
 
     this.joystick = this.plugins.get("rexvirtualjoystickplugin").add(this, {
       x: 80,
@@ -211,7 +218,6 @@ class scene0 extends Phaser.Scene {
       else this.astronauta.setVelocityX(0);
     });
 
-
     this.jumpButton = this.add
       .sprite(750, 400, "buttons", 8)
       .setInteractive()
@@ -223,14 +229,38 @@ class scene0 extends Phaser.Scene {
         this.jumpButton.setFrame(8);
       })
       .setScrollFactor(0);
-    
+
     this.game.socket.on("scene0", (state) => {
       if (state.astronauta) {
+        try {
+          if (state.astronauta.id === this.game.socket.id) return;
 
-        
+          let remotePlayer = this.remotePlayers.find(
+            (p) => p.id === state.astronauta.id,
+          );
+
+          if (!remotePlayer) {
+            remotePlayer = this.add
+              .sprite(state.astronauta.x, state.astronauta.y, "character", 0)
+            this.remotePlayers.push({
+              id: state.astronauta.id,
+              sprite: remotePlayer,
+            });
+          }
+
+          remotePlayer.sprite.setPosition(state.astronauta.x, state.astronauta.y);
+          remotePlayer.sprite.setTexture(
+            state.astronauta.texture,
+            state.astronauta.frame,
+          );
+        } catch (e) {
+          console.log(this.remotePlayers);
+          console.error("Error updating remote player:", e);
+        }
       }
     });
   }
+
 
   update() {
     if (
@@ -239,6 +269,24 @@ class scene0 extends Phaser.Scene {
       (this.astronauta.body.blocked.down || this.astronauta.body.blocked.up)
     )
       this.astronauta.anims.play("standing-still", true);
+
+    // Enviar atualização do jogador local
+    try {
+      this.game.socket.emit("scene0", this.game.room, {
+        astronauta: {
+          id: this.game.socket.id,
+          x: this.astronauta.x,
+          y: this.astronauta.y,
+          texture: "astronauta",
+          animation: this.astronauta.anims.currentAnim
+            ? this.astronauta.anims.currentAnim.key
+            : "standing-still",
+          frame: this.astronauta.anims.currentFrame.index,
+        },
+      });
+    } catch (e) {
+      console.error("Error updating player:", e);
+    }
   }
 
   jump(astronauta, gravity) {
@@ -251,19 +299,6 @@ class scene0 extends Phaser.Scene {
         astronauta.anims.play("jumping", true);
       }
   }
-}
-
-  try {
-    this.game.socket.emit("scene0", this.game.room, {
-      astronauta: {
-      x: this.astronauta.x,
-      y: this.astronauta.y,
-      key: this.astronauta.anims.currentAnim.key,
-      frame: this.astronauta.anims.currentFrame.index,
-    },
-  });
-} catch (e) {
-  console.error("Error updating astronauta:", e);
 }
 
 export default scene0;
