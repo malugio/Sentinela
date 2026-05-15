@@ -34,7 +34,7 @@ class scene0 extends Phaser.Scene {
 
     this.load.plugin(
       "rexvirtualjoystickplugin",
-      "../rexvirtualjoystickplugin.min.js",
+      "../js/rexvirtualjoystickplugin.min.js",
       true,
     );
   }
@@ -285,7 +285,7 @@ class scene0 extends Phaser.Scene {
         },
       });
     } catch (e) {
-      console.error("Error updating player:", e);
+      console.error("Error updating astronauta:", e);
     }
   }
 
