@@ -19,12 +19,12 @@ class preloader extends Phaser.Scene {
 
     this.load.font("pixelify-sans", "pixelify-sans.ttf");
 
-    this.load.image("room-brackground", "room-background.png");
+    this.load.image("room-background", "room-background.png");
     
     this.load.tilemapTiledJSON("mars ", "mars.json");
-    this.load.spritesheet("astronauta", "mars", {
-      frameWidth: 32,
-      frameHeight: 32,
+    this.load.spritesheet("astronauta", "astronauta.png", {
+      frameWidth: 64,
+      frameHeight: 64,
     });
     this.load.spritesheet("astronauta", "astronauta.png", {
       frameWidth: 64,

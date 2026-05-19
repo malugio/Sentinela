@@ -81,15 +81,6 @@ class scene0 extends Phaser.Scene {
       repeat: -1,
     });
 
-    this.anims.create({
-      key: "standing-still",
-      frames: this.anims.generateFrameNumbers("astronauta", {
-        start: 0,
-        end: 0,
-      }),
-      frameRate: 5,
-      repeat: -1,
-    });
 
     this.anims.create({
       key: "running-right",
@@ -101,15 +92,6 @@ class scene0 extends Phaser.Scene {
       repeat: -1,
     });
 
-    this.anims.create({
-      key: "standing-still",
-      frames: this.anims.generateFrameNumbers("astronauta", {
-        start: 1,
-        end: 1,
-      }),
-      frameRate: 5,
-      repeat: -1,
-    });
 
     this.anims.create({
       key: "running-left",
@@ -241,7 +223,7 @@ class scene0 extends Phaser.Scene {
 
           if (!remotePlayer) {
             remotePlayer = this.add
-              .sprite(state.astronauta.x, state.astronauta.y, "character", 0)
+              .sprite(state.astronauta.x, state.astronauta.y, "alien", 0)
             this.remotePlayers.push({
               id: state.astronauta.id,
               sprite: remotePlayer,
@@ -253,6 +235,10 @@ class scene0 extends Phaser.Scene {
             state.astronauta.texture,
             state.astronauta.frame,
           );
+
+
+
+          
         } catch (e) {
           console.log(this.remotePlayers);
           console.error("Error updating remote player:", e);
@@ -260,6 +246,7 @@ class scene0 extends Phaser.Scene {
       }
     });
   }
+  
 
 
   update() {

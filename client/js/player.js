@@ -22,11 +22,8 @@ class player extends Phaser.Scene {
     });
 
     this.anims.create({
-      key: "character",
-      frames: this.anims.generateFrameNumbers("character", {
-        start: 8,
-        end: 15,
-      }),
+      key: "alien",
+      frames: this.anims.generateFrameNumbers("alien", {start: 23, end: 27, }),
       frameRate: 10,
       repeat: -1,
     });
@@ -36,7 +33,7 @@ class player extends Phaser.Scene {
       .setScale(3)
       .setInteractive()
       .on("pointerdown", () => {
-        console.log("Astronauta player selected");
+        console.log("astronauta player selected");
         this.game.localPlayer = "astronauta";
         this.game.socket.emit(
           "select-player",
@@ -53,7 +50,7 @@ class player extends Phaser.Scene {
       .setScale(3)
       .setInteractive()
       .on("pointerdown", () => {
-        console.log("Alien player selected");
+        console.log("alien player selected");
         this.game.localPlayer = "alien";
         this.game.socket.emit(
           "select-player",
